@@ -3,6 +3,7 @@ package tools
 import (
 	"errors"
 	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 	"net"
 	"net/http"
 )
@@ -22,5 +23,15 @@ func RunHttpSrv(srv *http.Server) {
 			return
 		}
 		log.Fatalln("run api server failed:", err)
+	}
+}
+
+func RunGrpcSrv(tcpListen net.Listener, srv *grpc.Server) {
+	err := srv.Serve(tcpListen)
+	if err != nil {
+		if errors.Is(err, grpc.ErrServerStopped) {
+			return
+		}
+		log.Fatalln("run rpc server failed:", err)
 	}
 }
