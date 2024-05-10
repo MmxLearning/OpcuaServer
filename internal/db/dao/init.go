@@ -21,7 +21,9 @@ func init() {
 		log.Fatalln("连接 Mysql 失败:", err)
 	}
 
-	if err = DB.AutoMigrate(); err != nil {
+	if err = DB.AutoMigrate(
+		&User{},
+	); err != nil {
 		log.Fatalln("AutoMigration failed:", err)
 	}
 }
