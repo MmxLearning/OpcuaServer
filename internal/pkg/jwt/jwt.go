@@ -7,7 +7,7 @@ import (
 )
 
 type Claims struct {
-	jwt.Claims
+	jwt.RegisteredClaims
 	UserID uint `json:"userID"`
 }
 
@@ -21,8 +21,14 @@ type HS256Signer struct {
 	key []byte
 }
 
-func (s HS256Signer) GenerateToken(claims Claims) (string, error) {
-	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(s.key)
+func (s HS256Signer) GenerateToken(userID uint, valid time.Duration) (string, error) {
+	return jwt.NewWithClaims(jwt.SigningMethodHS256, &Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(valid)),
+			NotBefore: jwt.NewNumericDate(time.Now()),
+		},
+		UserID: userID,
+	}).SignedString(s.key)
 }
 
 func (s HS256Signer) ParseToken(token string) (*Claims, error) {
