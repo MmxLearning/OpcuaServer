@@ -23,6 +23,7 @@ func init() {
 
 	if err = DB.AutoMigrate(
 		&User{},
+		&Opcua{},
 	); err != nil {
 		log.Fatalln("AutoMigration failed:", err)
 	}
