@@ -8,7 +8,7 @@ import { token, goLogin } from "@/network/api.ts";
 
 export const App: FC = () => {
   useMount(() => {
-    if (import.meta.env.MODE === "production") {
+    if (location.pathname !== "/login") {
       if (!token) goLogin();
     }
   });

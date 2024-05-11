@@ -15,17 +15,15 @@ export const useApi = <T>(url: string | null, config?: SWRConfiguration<T>) => {
   );
 };
 
-export let token = localStorage.getItem('token')
+export let token = localStorage.getItem("token");
 export const setToken = (t: string) => {
-  token = t
-  localStorage.setItem('token', t)
-}
+  token = t;
+  localStorage.setItem("token", t);
+};
 
 export const goLogin = () => {
-  location.assign(
-      `/login`
-  )
-}
+  location.assign("/login");
+};
 
 export function apiV1ErrorHandler(err: ApiError<void>) {
   switch (true) {
@@ -41,26 +39,26 @@ export function apiV1ErrorHandler(err: ApiError<void>) {
 }
 
 api.interceptors.request.use((config) => {
-  if (config.url?.startsWith('public/')) {
-    return config
+  if (config.url?.startsWith("public/")) {
+    return config;
   }
   if (!token) {
-    goLogin()
-    const controller = new AbortController()
-    controller.abort()
+    goLogin();
+    const controller = new AbortController();
+    controller.abort();
     return {
       ...config,
-      signal: controller.signal
-    }
+      signal: controller.signal,
+    };
   }
-  config.headers.Authorization = token
+  config.headers.Authorization = token;
   return config;
 });
 api.interceptors.response.use(undefined, (err: ApiError<ApiResponse<void>>) => {
   console.log(err);
   if (err.response?.data?.code === 3) {
-    goLogin()
-    return new Promise(() => { })
+    goLogin();
+    return new Promise(() => {});
   }
   apiV1ErrorHandler(err);
   return Promise.reject(err);
