@@ -25,3 +25,10 @@ func (a OpcuaSrv) Store(name, nodeID, data string, timestamp uint32) (*dao.Opcua
 	}
 	return &model, model.Insert(a.DB)
 }
+
+func (a OpcuaSrv) Search(name, nodeID string, startAt, endAt int64) ([]dao.Opcua, error) {
+	return (&dao.Opcua{
+		Name:   name,
+		NodeID: nodeID,
+	}).Search(a.DB, startAt, endAt)
+}
