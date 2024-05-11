@@ -1,15 +1,18 @@
-import {FC} from 'react'
-import useMount from '@hooks/useMount.ts'
+import { FC } from "react";
+import useMount from "@hooks/useMount.ts";
 
-import { token, goLogin } from '@/network/api.ts'
+import { RouterProvider } from "react-router-dom";
+import router from "@/pages/router.tsx";
 
-export const App:FC = () => {
-    useMount(() => {
-        if (import.meta.env.MODE === 'production') {
-            if (!token) goLogin()
-        }
-    })
+import { token, goLogin } from "@/network/api.ts";
 
-    return <></>
-}
-export default App
+export const App: FC = () => {
+  useMount(() => {
+    if (import.meta.env.MODE === "production") {
+      if (!token) goLogin();
+    }
+  });
+
+  return <RouterProvider router={router} />;
+};
+export default App;
