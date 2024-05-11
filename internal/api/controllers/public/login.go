@@ -50,6 +50,6 @@ func Login(c *gin.Context) {
 	}
 
 	callback.Success(c, gin.H{
-		"token": token,
+		"token": "user" + token,
 	})
 }
