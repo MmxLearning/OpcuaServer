@@ -31,7 +31,11 @@ type Opcua struct {
 }
 
 func (s *Opcua) ReportOpcua(_ context.Context, msg *opcuaProto.OpcuaMessage) (*opcuaProto.OpcuaResult, error) {
-	model, err := service.Opcua.Store(msg.Name, msg.NodeId, unsafe.String(unsafe.SliceData(msg.Data), len(msg.Data)))
+	model, err := service.Opcua.Store(
+		msg.Name, msg.NodeId,
+		unsafe.String(unsafe.SliceData(msg.Data), len(msg.Data)),
+		msg.Timestamp,
+	)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

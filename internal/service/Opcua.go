@@ -16,11 +16,12 @@ func (a OpcuaSrv) Begin() (OpcuaSrv, error) {
 	return a, a.Error
 }
 
-func (a OpcuaSrv) Store(name, nodeID string, data string) (*dao.Opcua, error) {
+func (a OpcuaSrv) Store(name, nodeID, data string, timestamp uint32) (*dao.Opcua, error) {
 	model := dao.Opcua{
-		Name:   name,
-		NodeID: nodeID,
-		Data:   data,
+		Name:      name,
+		NodeID:    nodeID,
+		Data:      data,
+		Timestamp: timestamp,
 	}
 	return &model, model.Insert(a.DB)
 }

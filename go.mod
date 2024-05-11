@@ -7,7 +7,7 @@ require (
 	github.com/Mmx233/Gateway/v2 v2.0.6
 	github.com/Mmx233/GinWebServe v1.0.5
 	github.com/Mmx233/config v0.1.0
-	github.com/MmxLearning/OpcuaProto v0.0.3
+	github.com/MmxLearning/OpcuaProto v0.0.4
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/sirupsen/logrus v1.9.3
