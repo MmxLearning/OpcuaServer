@@ -11,10 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 'stable'
-
       - uses: pnpm/action-setup@v4
         with:
           version: latest
@@ -27,7 +23,7 @@ jobs:
           pnpm run build
 
       - name: Build Binary
-        uses: Mmx233/GoReleaseCli@v1.1.8
+        uses: Mmx233/GoReleaseCli@v1.1.9
         with:
           target: ./cmd/server
           name: runner
