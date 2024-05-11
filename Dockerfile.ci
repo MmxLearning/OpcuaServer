@@ -6,7 +6,7 @@ RUN apk update && \
     apk upgrade --no-cache && \
     rm -rf /var/cache/apk/*
 
-COPY /runner_${TARGETOS}_${TARGETARCH} /usr/bin/runner
+COPY /build/runner_${TARGETOS}_${TARGETARCH} /usr/bin/runner
 RUN chmod +x /usr/bin/runner
 
 WORKDIR /data
