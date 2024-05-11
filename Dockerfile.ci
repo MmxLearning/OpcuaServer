@@ -1,0 +1,14 @@
+FROM alpine:latest
+ARG TARGETOS
+ARG TARGETARCH
+
+RUN apk update && \
+    apk upgrade --no-cache && \
+    rm -rf /var/cache/apk/*
+
+COPY /runner_${TARGETOS}_${TARGETARCH} /usr/bin/runner
+RUN chmod +x /usr/bin/runner
+
+WORKDIR /data
+
+ENTRYPOINT [ "/usr/bin/runner" ]
