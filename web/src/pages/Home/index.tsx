@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import JsonView from "@uiw/react-json-view";
 
 import {
   PickerValidDate,
@@ -9,7 +10,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DataGrid } from "@mui/x-data-grid";
 
 import { LoadingButton } from "@mui/lab";
-import { Container, Stack, TextField, Button } from "@mui/material";
+import {
+  Container,
+  Stack,
+  TextField,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import { HorizontalRule, InfoOutlined } from "@mui/icons-material";
 
 import { useApi } from "@/network/api.ts";
@@ -20,14 +30,19 @@ export const Home: FC = () => {
   const [startAt, setStartAt] = useState<PickerValidDate | null>(null);
   const [endAt, setEndAt] = useState<PickerValidDate | null>(null);
 
-  const [isSearching, setIsSearching] = useState("");
+  const [onSearching, setOnSearching] = useState("");
 
-  const { isLoading, data, mutate } = useApi<Opcua.SearchResult[]>(
-    isSearching ? `user/opcua/search?${isSearching}` : null,
+  const { isLoading, data } = useApi<Opcua.SearchResult[]>(
+    onSearching ? `user/opcua/search?${onSearching}` : null,
   );
 
-  const onSearch = () => {
-    setIsSearching(
+  const [isViewingDetail, setIsViewingDetail] = useState(false);
+  const [onViewDetail, setOnViewDetail] = useState<Opcua.SearchResult | null>(
+    null,
+  );
+
+  const handleSearch = () => {
+    setOnSearching(
       new URLSearchParams({
         name,
         nodeID,
@@ -109,7 +124,7 @@ export const Home: FC = () => {
                 my: 0.1,
                 flex: 1,
               }}
-              onClick={onSearch}
+              onClick={handleSearch}
             >
               Search
             </LoadingButton>
@@ -153,6 +168,9 @@ export const Home: FC = () => {
               {
                 field: "action",
                 headerName: "Action",
+                sortable: false,
+                filterable: false,
+                disableColumnMenu: true,
                 width: 160,
                 renderCell: (params) => {
                   return (
@@ -160,7 +178,10 @@ export const Home: FC = () => {
                       <Button
                         variant="outlined"
                         startIcon={<InfoOutlined />}
-                        onClick={() => {}}
+                        onClick={() => {
+                          setIsViewingDetail(true);
+                          setOnViewDetail(params.row);
+                        }}
                       >
                         Detail
                       </Button>
@@ -178,6 +199,26 @@ export const Home: FC = () => {
           />
         </Stack>
       </Container>
+
+      <Dialog
+        open={isViewingDetail}
+        onClose={() => setIsViewingDetail(false)}
+        scroll={"paper"}
+        fullWidth
+        maxWidth={"lg"}
+      >
+        <DialogTitle id="scroll-dialog-title">
+          {onViewDetail?.name} {onViewDetail?.id}
+        </DialogTitle>
+        <DialogContent dividers>
+          <JsonView
+            value={onViewDetail ? JSON.parse(onViewDetail.data) : undefined}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsViewingDetail(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </LocalizationProvider>
   );
 };
