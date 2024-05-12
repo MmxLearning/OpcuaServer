@@ -28,5 +28,5 @@ func (a *Opcua) Search(tx *gorm.DB, startTime, endTime int64) ([]Opcua, error) {
 	if endTime != 0 {
 		tx = tx.Where("timestamp<?", endTime)
 	}
-	return result, tx.Find(&result).Error
+	return result, tx.Order("id DESC").Find(&result).Error
 }
