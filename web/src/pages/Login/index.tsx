@@ -35,8 +35,10 @@ export const Login: FC = () => {
 
     try {
       const {
-        data: { token },
-      } = await api.post<{ token: string }>("public/login", {
+        data: {
+          data: { token },
+        },
+      } = await api.post<ApiResponse<{ token: string }>>("public/login", {
         username,
         password,
       });
