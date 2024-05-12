@@ -1,5 +1,4 @@
 import { FC, useState } from "react";
-import toast from "react-hot-toast";
 
 import {
   PickerValidDate,
@@ -7,8 +6,10 @@ import {
   LocalizationProvider,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DataGrid } from "@mui/x-data-grid";
 
-import { Container, Stack, Divider, TextField, Button } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Container, Stack, TextField, Button } from "@mui/material";
 import { HorizontalRule } from "@mui/icons-material";
 
 import { useApi } from "@/network/api.ts";
@@ -18,6 +19,23 @@ export const Home: FC = () => {
   const [nodeID, setNodeID] = useState("");
   const [startAt, setStartAt] = useState<PickerValidDate | null>(null);
   const [endAt, setEndAt] = useState<PickerValidDate | null>(null);
+
+  const [isSearching, setIsSearching] = useState("");
+
+  const { isLoading, data, mutate } = useApi(
+    isSearching ? `user/opcua/search?${isSearching}` : null,
+  );
+
+  const onSearch = () => {
+    setIsSearching(
+      new URLSearchParams({
+        name,
+        nodeID,
+        startAt: startAt?.unix().toString() ?? "0",
+        endAt: endAt?.unix().toString() ?? "0",
+      }).toString(),
+    );
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -31,7 +49,9 @@ export const Home: FC = () => {
         <Stack
           alignItems={"stretch"}
           sx={{
+            boxSizing: "border-box",
             padding: "3rem 2rem",
+            height: "100%",
           }}
           spacing={2.5}
         >
@@ -43,9 +63,17 @@ export const Home: FC = () => {
               },
             }}
           >
-            <TextField label={"Name"} />
+            <TextField
+              label={"Name"}
+              value={name}
+              onChange={(ev) => setName(ev.target.value)}
+            />
             <div style={{ width: "2rem", height: "1.5rem" }} />
-            <TextField label={"NodeID"} />
+            <TextField
+              label={"NodeID"}
+              value={nodeID}
+              onChange={(ev) => setNodeID(ev.target.value)}
+            />
           </Stack>
           <Stack
             direction={{ md: "row", xs: "column" }}
@@ -74,16 +102,32 @@ export const Home: FC = () => {
 
             <div style={{ width: "2.5rem", height: "1.5rem" }} />
 
-            <Button
+            <LoadingButton
               variant={"contained"}
+              loading={isLoading}
               sx={{
                 my: 0.1,
                 flex: 1,
               }}
+              onClick={onSearch}
             >
               Search
-            </Button>
+            </LoadingButton>
           </Stack>
+
+          <DataGrid
+            autoHeight
+            rows={[]}
+            disableColumnSelector
+            disableDensitySelector
+            columns={[]}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 30 },
+              },
+            }}
+            pageSizeOptions={[30, 60, 100]}
+          />
         </Stack>
       </Container>
     </LocalizationProvider>
