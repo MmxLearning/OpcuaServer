@@ -67,18 +67,29 @@ export const Login: FC = () => {
           spacing={2}
           alignItems={"center"}
           sx={{
-            padding: "2rem 4rem",
+            padding: "3rem 4rem",
           }}
         >
           <Typography variant={"h4"}>OPC UA Sync Server</Typography>
-          <Stack alignItems={"center"} spacing={2} pt={3}>
+          <Stack
+            alignItems={"center"}
+            spacing={2}
+            pt={3}
+            sx={{
+              width: "16.5rem",
+              maxWidth: "100%",
+            }}
+          >
             <TextField
+              fullWidth
               label={"Username"}
               value={username}
               onChange={(ev) => setUsername(ev.target.value)}
             />
             <TextField
+              fullWidth
               label={"Password"}
+              type={"password"}
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
             />
