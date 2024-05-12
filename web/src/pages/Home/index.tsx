@@ -10,7 +10,7 @@ import { DataGrid } from "@mui/x-data-grid";
 
 import { LoadingButton } from "@mui/lab";
 import { Container, Stack, TextField, Button } from "@mui/material";
-import { HorizontalRule } from "@mui/icons-material";
+import { HorizontalRule, InfoOutlined } from "@mui/icons-material";
 
 import { useApi } from "@/network/api.ts";
 
@@ -22,7 +22,7 @@ export const Home: FC = () => {
 
   const [isSearching, setIsSearching] = useState("");
 
-  const { isLoading, data, mutate } = useApi(
+  const { isLoading, data, mutate } = useApi<Opcua.SearchResult[]>(
     isSearching ? `user/opcua/search?${isSearching}` : null,
   );
 
@@ -116,11 +116,59 @@ export const Home: FC = () => {
           </Stack>
 
           <DataGrid
-            autoHeight
-            rows={[]}
+            rows={data ?? []}
             disableColumnSelector
             disableDensitySelector
-            columns={[]}
+            columns={[
+              {
+                field: "id",
+                headerName: "ID",
+                minWidth: 80,
+                flex: 1,
+              },
+              {
+                field: "name",
+                headerName: "Name",
+                minWidth: 150,
+                flex: 3,
+              },
+              {
+                field: "created_at",
+                headerName: "Created At",
+                minWidth: 160,
+                flex: 5,
+                renderCell: (params) => {
+                  return new Date(params.value * 1000).toLocaleString();
+                },
+              },
+              {
+                field: "timestamp",
+                headerName: "Timestamp",
+                minWidth: 160,
+                flex: 5,
+                renderCell: (params) => {
+                  return new Date(params.value * 1000).toLocaleString();
+                },
+              },
+              {
+                field: "action",
+                headerName: "Action",
+                width: 160,
+                renderCell: (params) => {
+                  return (
+                    <>
+                      <Button
+                        variant="outlined"
+                        startIcon={<InfoOutlined />}
+                        onClick={() => {}}
+                      >
+                        Detail
+                      </Button>
+                    </>
+                  );
+                },
+              },
+            ]}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 30 },
