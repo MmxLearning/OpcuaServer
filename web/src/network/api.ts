@@ -22,6 +22,8 @@ export const setToken = (t: string) => {
 };
 
 export const goLogin = () => {
+  token=null
+  localStorage.removeItem("token")
   location.assign("/login");
 };
 

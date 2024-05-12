@@ -16,7 +16,7 @@ import (
 func Login(c *gin.Context) {
 	var f struct {
 		Username string `json:"username" form:"username" binding:"required,max=15"`
-		Password string `json:"password" form:"password" binding:"required,max=100"`
+		Password string `json:"password" form:"password" binding:"required,max=72"`
 	}
 	if err := c.ShouldBind(&f); err != nil {
 		callback.Error(c, callback.ErrForm, err)
