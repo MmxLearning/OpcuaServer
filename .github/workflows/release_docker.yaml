@@ -23,7 +23,7 @@ jobs:
           pnpm run build
 
       - name: Build Binary
-        uses: Mmx233/GoReleaseCli@v1.1.9
+        uses: Mmx233/GoReleaseCli@v1.1.10
         with:
           target: ./cmd/server
           name: runner
