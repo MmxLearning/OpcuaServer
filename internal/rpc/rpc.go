@@ -3,11 +3,13 @@ package rpc
 import (
 	"context"
 	opcuaProto "github.com/MmxLearning/OpcuaProto"
+	"github.com/MmxLearning/OpcuaServer/internal/pkg/rdpTable"
 	"github.com/MmxLearning/OpcuaServer/internal/rpc/middlewares"
 	"github.com/MmxLearning/OpcuaServer/internal/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"sync"
 	"unsafe"
 )
 
@@ -42,4 +44,42 @@ func (s *Opcua) ReportOpcua(_ context.Context, msg *opcuaProto.OpcuaMessage) (*o
 	return &opcuaProto.OpcuaResult{
 		Id: uint64(model.ID),
 	}, nil
+}
+
+func (s *Opcua) RemoteScreen(srv opcuaProto.Opcua_RemoteScreenServer) error {
+	firstMsg, err := srv.Recv()
+	if err != nil {
+		return status.Error(codes.Internal, err.Error())
+	}
+
+	screenHello := firstMsg.GetHello()
+	if screenHello == nil {
+		return status.Error(codes.DataLoss, "screen hello required")
+	}
+
+	var listeners sync.Map
+	rdpTable.Register(&rdpTable.Info{
+		Name:      screenHello.Name,
+		Desc:      screenHello.Desc,
+		FrameRate: screenHello.FrameRate,
+		SetStream: func(stream bool) error {
+			return srv.Send(&opcuaProto.StreamScreen{
+				Stream: stream,
+			})
+		},
+		Listener: &listeners,
+	})
+
+	for {
+		msg, err := srv.Recv()
+		if err != nil {
+			return status.Error(codes.Internal, err.Error())
+		}
+		frame := msg.GetData()
+
+		listeners.Range(func(_, value any) bool {
+			value.(func([]byte))(frame)
+			return true
+		})
+	}
 }
