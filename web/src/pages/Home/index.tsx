@@ -54,12 +54,12 @@ export const Home: FC = () => {
     null,
   );
 
-  // const [streamFrame, setStreamFrame] = useState("");
+  const [streamFrame, setStreamFrame] = useState<string | undefined>(undefined);
   useWebsocket(
-    onViewStream ? `user/rdp/stream?name=${encodeURI(onViewStream.name)}` : null,
-    (ev) => {
-        console.log(ev)
-    },
+    onViewStream
+      ? `user/rdp/stream?name=${encodeURI(onViewStream.name)}`
+      : null,
+    (ev) => setStreamFrame(window.URL.createObjectURL(ev.data)),
   );
 
   const handleSearch = () => {
@@ -318,7 +318,9 @@ export const Home: FC = () => {
               height: "100%",
               width: "100%",
             }}
-          ></Stack>
+          >
+            <img src={streamFrame} />
+          </Stack>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOnViewStream(null)}>Close</Button>
