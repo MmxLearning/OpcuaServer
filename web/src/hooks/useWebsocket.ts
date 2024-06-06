@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { baseURL } from "@/network/api.ts";
+import { baseURL, token } from "@/network/api.ts";
 
 import useInterval from "@hooks/useInterval.ts";
 
@@ -17,6 +17,7 @@ const useWebsocket = (
     if (url === null) return;
     conn.current = new WebSocket(
       `${location.protocol === "https:" ? "wss" : "ws"}://${location.host + baseURL + url}`,
+      token ?? undefined,
     );
     conn.current.onopen = () => {
       setConnected(true);
