@@ -11,9 +11,9 @@ type Info struct {
 	Desc      string `json:"desc"`
 	FrameRate uint32 `json:"frame_rate"`
 
-	SetStream func(stream bool) error
+	SetStream func(stream bool) error `json:"-"`
 	// func([]bytes)
-	Listener *sync.Map
+	Listener *sync.Map `json:"-"`
 }
 
 func RdpRegister(info *Info) (unregister func()) {
@@ -40,4 +40,13 @@ func ListenRegister(name, listener string, onFrame func([]byte)) (unregister fun
 	return func() {
 		info.Listener.CompareAndDelete(listener, onFrame)
 	}, true
+}
+
+func RdpList() []*Info {
+	var result = make([]*Info, 0)
+	Table.Range(func(_, value any) bool {
+		result = append(result, value.(*Info))
+		return true
+	})
+	return result
 }

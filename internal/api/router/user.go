@@ -12,4 +12,7 @@ func routerUser(G *gin.RouterGroup) {
 
 	opcua := G.Group("opcua")
 	opcua.GET("search", controllers.Search)
+
+	rdp := G.Group("rdp")
+	rdp.GET("/", controllers.GetRdpTable)
 }
