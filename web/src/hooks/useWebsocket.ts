@@ -16,7 +16,7 @@ const useWebsocket = (
     conn.current?.close();
     if (url === null) return;
     conn.current = new WebSocket(
-      `${location.protocol === "https" ? "wss" : "ws"}://${location.host + baseURL + url}`,
+      `${location.protocol === "https:" ? "wss" : "ws"}://${location.host + baseURL + url}`,
     );
     conn.current.onopen = () => {
       setConnected(true);
