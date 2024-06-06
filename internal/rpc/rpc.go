@@ -58,11 +58,14 @@ func (s *Opcua) RemoteScreen(srv opcuaProto.Opcua_RemoteScreenServer) error {
 	}
 
 	var listeners sync.Map
+	var srvLock sync.Mutex
 	unregister := rdpTable.RdpRegister(&rdpTable.Info{
 		Name:      screenHello.Name,
 		Desc:      screenHello.Desc,
 		FrameRate: screenHello.FrameRate,
 		SetStream: func(stream bool) error {
+			srvLock.Lock()
+			defer srvLock.Unlock()
 			return srv.Send(&opcuaProto.StreamScreen{
 				Stream: stream,
 			})
