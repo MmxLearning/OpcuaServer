@@ -58,7 +58,7 @@ func (s *Opcua) RemoteScreen(srv opcuaProto.Opcua_RemoteScreenServer) error {
 	}
 
 	var listeners sync.Map
-	rdpTable.Register(&rdpTable.Info{
+	unregister := rdpTable.RdpRegister(&rdpTable.Info{
 		Name:      screenHello.Name,
 		Desc:      screenHello.Desc,
 		FrameRate: screenHello.FrameRate,
@@ -69,6 +69,7 @@ func (s *Opcua) RemoteScreen(srv opcuaProto.Opcua_RemoteScreenServer) error {
 		},
 		Listener: &listeners,
 	})
+	defer unregister()
 
 	for {
 		msg, err := srv.Recv()

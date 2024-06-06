@@ -16,6 +16,13 @@ type Info struct {
 	Listener *sync.Map
 }
 
-func Register(info *Info) {
+func RdpRegister(info *Info) (unregister func()) {
 	Table.Store(info.Name, info)
+	return func() {
+		Table.CompareAndDelete(info.Name, info)
+	}
+}
+
+func ListenRegister(name string, onFrame func([]byte)) {
+
 }
