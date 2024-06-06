@@ -2,6 +2,7 @@ package rdpTable
 
 import (
 	"sync"
+	"sync/atomic"
 )
 
 var Table sync.Map
@@ -12,8 +13,10 @@ type Info struct {
 	FrameRate uint32 `json:"frame_rate"`
 
 	SetStream func(stream bool) error `json:"-"`
+
 	// func([]bytes)
-	Listener *sync.Map `json:"-"`
+	Listener    *sync.Map `json:"-"`
+	listenCount atomic.Uint32
 }
 
 func RdpRegister(info *Info) (unregister func()) {
@@ -36,9 +39,17 @@ func ListenRegister(name, listener string, onFrame func([]byte)) (unregister fun
 	if !ok {
 		return nil, false
 	}
+	count := info.listenCount.Add(1)
+	if count == 1 {
+		_ = info.SetStream(true)
+	}
 	info.Listener.Store(listener, onFrame)
 	return func() {
 		info.Listener.CompareAndDelete(listener, onFrame)
+		count := info.listenCount.Add(^(0))
+		if count == 0 {
+			_ = info.SetStream(false)
+		}
 	}, true
 }
 
