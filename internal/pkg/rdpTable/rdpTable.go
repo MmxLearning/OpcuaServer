@@ -46,7 +46,7 @@ func ListenRegister(name, listener string, onFrame func([]byte)) (unregister fun
 	info.Listener.Store(listener, onFrame)
 	return func() {
 		info.Listener.CompareAndDelete(listener, onFrame)
-		count := info.listenCount.Add(^(0))
+		count := info.listenCount.Add(^(uint32(0)))
 		if count == 0 {
 			_ = info.SetStream(false)
 		}
