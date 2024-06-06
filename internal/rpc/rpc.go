@@ -82,7 +82,7 @@ func (s *Opcua) RemoteScreen(srv opcuaProto.Opcua_RemoteScreenServer) error {
 		frame := msg.GetData()
 
 		listeners.Range(func(_, value any) bool {
-			value.(func([]byte))(frame)
+			(*value.(*func([]byte)))(frame)
 			return true
 		})
 	}

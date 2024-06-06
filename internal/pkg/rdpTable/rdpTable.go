@@ -14,7 +14,7 @@ type Info struct {
 
 	SetStream func(stream bool) error `json:"-"`
 
-	// func([]bytes)
+	// *func([]bytes)
 	Listener    *sync.Map `json:"-"`
 	listenCount atomic.Uint32
 }
@@ -43,9 +43,10 @@ func ListenRegister(name, listener string, onFrame func([]byte)) (unregister fun
 	if count == 1 {
 		_ = info.SetStream(true)
 	}
-	info.Listener.Store(listener, onFrame)
+	onFrameAddr := &onFrame
+	info.Listener.Store(listener, onFrameAddr)
 	return func() {
-		info.Listener.CompareAndDelete(listener, onFrame)
+		info.Listener.CompareAndDelete(listener, onFrameAddr)
 		count := info.listenCount.Add(^(uint32(0)))
 		if count == 0 {
 			_ = info.SetStream(false)
