@@ -8,6 +8,7 @@ import (
 	"github.com/MmxLearning/OpcuaServer/internal/pkg/wsPool"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"io"
 	"time"
 )
 
@@ -37,9 +38,14 @@ func RdpStream(c *gin.Context) {
 		_ = conn.WriteMessage(websocket.BinaryMessage, bytes)
 	})
 	if !ok {
+		_ = conn.Close()
 		callback.Error(c, callback.ErrNotExist)
 		return
 	}
+
+	pool.MsgHandler(conn, func(_ int, _ io.Reader) {
+		// keep silence
+	})
 
 	conn.OnClose = func(_ *pool.Conn) {
 		unregister()
