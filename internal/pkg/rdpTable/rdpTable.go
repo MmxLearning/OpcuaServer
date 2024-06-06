@@ -23,6 +23,21 @@ func RdpRegister(info *Info) (unregister func()) {
 	}
 }
 
-func ListenRegister(name string, onFrame func([]byte)) {
+func LoadRdp(name string) (*Info, bool) {
+	val, ok := Table.Load(name)
+	if !ok {
+		return nil, false
+	}
+	return val.(*Info), true
+}
 
+func ListenRegister(name, listener string, onFrame func([]byte)) (unregister func(), ok bool) {
+	info, ok := LoadRdp(name)
+	if !ok {
+		return nil, false
+	}
+	info.Listener.Store(listener, onFrame)
+	return func() {
+		info.Listener.CompareAndDelete(listener, onFrame)
+	}, true
 }
