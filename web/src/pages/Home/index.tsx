@@ -317,6 +317,10 @@ export const Home: FC = () => {
             sx={{
               height: "100%",
               width: "100%",
+              "& img": {
+                maxWidth: "100%",
+                maxHeight: "100%",
+              },
             }}
           >
             <img src={streamFrame} />
