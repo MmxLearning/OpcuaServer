@@ -19,8 +19,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Grid,
+  Card,
+  Typography,
+  CardContent,
 } from "@mui/material";
-import { HorizontalRule, InfoOutlined } from "@mui/icons-material";
+import { HorizontalRule, InfoOutlined, Stream } from "@mui/icons-material";
 
 import { useApi } from "@/network/api.ts";
 
@@ -39,6 +43,11 @@ export const Home: FC = () => {
   const [isViewingDetail, setIsViewingDetail] = useState(false);
   const [onViewDetail, setOnViewDetail] = useState<Opcua.SearchResult | null>(
     null,
+  );
+
+  const [isViewingRdp, setIsViewingRdp] = useState(false);
+  const { isLoading: isRdpDataLoading, data: rdpData } = useApi<Rdp.Info[]>(
+    isViewingRdp ? `user/rdp/` : null,
   );
 
   const handleSearch = () => {
@@ -70,6 +79,21 @@ export const Home: FC = () => {
           }}
           spacing={2.5}
         >
+          <Stack
+            direction={"row"}
+            sx={{
+              width: "100%",
+            }}
+          >
+            <LoadingButton
+              startIcon={<Stream />}
+              variant={"outlined"}
+              onClick={() => setIsViewingRdp(true)}
+              loading={isRdpDataLoading}
+            >
+              Remote Devices
+            </LoadingButton>
+          </Stack>
           <Stack
             direction={{ md: "row", xs: "column" }}
             sx={{
@@ -207,7 +231,7 @@ export const Home: FC = () => {
         fullWidth
         maxWidth={"lg"}
       >
-        <DialogTitle id="scroll-dialog-title">
+        <DialogTitle>
           {onViewDetail?.name} {onViewDetail?.id}
         </DialogTitle>
         <DialogContent dividers>
@@ -217,6 +241,35 @@ export const Home: FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsViewingDetail(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={!!rdpData && isViewingRdp}
+        onClose={() => setIsViewingRdp(false)}
+        scroll={"paper"}
+        fullWidth
+        maxWidth={"md"}
+      >
+        <DialogTitle>Remote Devices</DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={2}>
+            {rdpData?.map((item) => (
+              <Grid key={item.name} item md={4} sm={6}>
+                <Card elevation={2}>
+                  <CardContent>
+                    <Typography variant={"h5"}>{item.name}</Typography>
+                    <Typography variant={"body2"} color={"text.secondary"}>
+                      {item.desc}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsViewingRdp(false)}>Close</Button>
         </DialogActions>
       </Dialog>
     </LocalizationProvider>
