@@ -15,4 +15,5 @@ func routerUser(G *gin.RouterGroup) {
 
 	rdp := G.Group("rdp")
 	rdp.GET("/", controllers.GetRdpTable)
+	rdp.GET("stream", controllers.RdpStream)
 }

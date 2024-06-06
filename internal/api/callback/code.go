@@ -6,6 +6,7 @@ const (
 	cErrUnauthorized
 	cErrUsernameOrPasswordNotCorrect
 	cErrUnexpected
+	cErrNotExist
 )
 
 var (
@@ -33,5 +34,10 @@ var (
 		Code:       cErrUnexpected,
 		Msg:        "unexpected error occurred",
 		HttpStatus: 500,
+	}
+	ErrNotExist = &Msg{
+		Code:       cErrNotExist,
+		Msg:        "target not exist",
+		HttpStatus: 404,
 	}
 )
