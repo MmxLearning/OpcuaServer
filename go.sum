@@ -6,6 +6,8 @@ github.com/Mmx233/Gateway/v2 v2.0.6 h1:khTMGz7kipu5OFij3+AhsVHarOY0JyswXbtUbe0Oz
 github.com/Mmx233/Gateway/v2 v2.0.6/go.mod h1:ft2UJaIIPdNTBtpuF3s5GInFNVP9VIfrOZWXR0kVVns=
 github.com/Mmx233/GinWebServe v1.0.5 h1:R4piDyZY7RFExIhT63kQ2HhrKBHIl2klqP8wEaRf1Wc=
 github.com/Mmx233/GinWebServe v1.0.5/go.mod h1:0O0uVbb0Mr3PtHpFFssvoR1+hq6f3HCEXEViD5Py/do=
+github.com/Mmx233/WsPool v0.1.8 h1:AM76N3ERLG3WE+P/6P3PCU86ngI2U82p32tGkZUfLZI=
+github.com/Mmx233/WsPool v0.1.8/go.mod h1:cweHz9CyfGO6FUZTp9pQVSGZjoc4BN1c+lkP3Nmph6E=
 github.com/Mmx233/config v0.1.0 h1:nqZWr4FKmSXVsl21QX/1VH1spCEA+3PuzeyGDkQ43jU=
 github.com/Mmx233/config v0.1.0/go.mod h1:ge+JBtKrLTGVE26Xx2LDl4s0QuCcddDabuEolr26PyQ=
 github.com/Mmx233/tool v0.7.7 h1:BscNXAm7k5enwyR22Dzy2+2Kv/gynyzFg9abdzoSbHg=
@@ -47,6 +49,8 @@ github.com/golang-jwt/jwt/v5 v5.2.1/go.mod h1:pqrtFR0X4osieyHYxtmOUWsAWrfe1Q5UVI
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
+github.com/gorilla/websocket v1.5.1 h1:gmztn0JnHVt9JZquRuzLw3g4wouNVzKL15iLr/zn/QY=
+github.com/gorilla/websocket v1.5.1/go.mod h1:x3kM2JMyaluk02fnUJpQuwD2dCS5NDG2ZHL0uE0tcaY=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.5 h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=

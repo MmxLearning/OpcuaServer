@@ -6,10 +6,12 @@ require (
 	github.com/Mmx233/EnvConfig v0.0.2
 	github.com/Mmx233/Gateway/v2 v2.0.6
 	github.com/Mmx233/GinWebServe v1.0.5
+	github.com/Mmx233/WsPool v0.1.8
 	github.com/Mmx233/config v0.1.0
 	github.com/MmxLearning/OpcuaProto v0.0.8
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/gorilla/websocket v1.5.1
 	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/crypto v0.23.0
 	google.golang.org/grpc v1.63.2
