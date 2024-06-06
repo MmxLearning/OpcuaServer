@@ -27,6 +27,9 @@ func UserAuth(jwtKey []byte) gin.HandlerFunc {
 	jwtSigner := jwt.New(jwtKey)
 	return func(c *gin.Context) {
 		header := c.GetHeader("Authorization")
+		if header == "" {
+			header = c.GetHeader("Sec-WebSocket-Protocol")
+		}
 		headerSplit := strings.Split(header, " ")
 		if len(headerSplit) == 2 && headerSplit[0] == "user" {
 			claims, err := jwtSigner.ParseToken(headerSplit[1])

@@ -25,7 +25,9 @@ func RdpStream(c *gin.Context) {
 	}
 
 	clientIdentity := c.ClientIP() + "-" + fmt.Sprint(time.Now().UnixNano())
-	conn, err := wsPool.Rdp.NewConn(c, clientIdentity, nil)
+	conn, err := wsPool.Rdp.NewConn(c, clientIdentity, map[string][]string{
+		"Sec-WebSocket-Protocol": {c.GetHeader("Sec-WebSocket-Protocol")},
+	})
 	if err != nil {
 		callback.Error(c, callback.ErrUnexpected, err)
 		return
