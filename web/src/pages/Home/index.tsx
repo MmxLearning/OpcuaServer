@@ -54,7 +54,7 @@ export const Home: FC = () => {
     null,
   );
 
-  const [streamFrame, setStreamFrame] = useState("");
+  // const [streamFrame, setStreamFrame] = useState("");
   useWebsocket(
     onViewStream ? `user/rdp/stream?${encodeURI(onViewStream.name)}` : null,
     (ev) => {
