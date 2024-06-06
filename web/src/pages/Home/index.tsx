@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import useWebsocket from "@hooks/useWebsocket.ts";
 import JsonView from "@uiw/react-json-view";
 
 import {
@@ -48,6 +49,17 @@ export const Home: FC = () => {
   const [isViewingRdp, setIsViewingRdp] = useState(false);
   const { isLoading: isRdpDataLoading, data: rdpData } = useApi<Rdp.Info[]>(
     isViewingRdp ? `user/rdp/` : null,
+  );
+  const [onViewStream, setOnViewStream] = useState<Rdp.OnViewStream | null>(
+    null,
+  );
+
+  const [streamFrame, setStreamFrame] = useState("");
+  useWebsocket(
+    onViewStream ? `user/rdp/stream?${encodeURI(onViewStream.name)}` : null,
+    (ev) => {
+        console.log(ev)
+    },
   );
 
   const handleSearch = () => {
@@ -256,8 +268,20 @@ export const Home: FC = () => {
           <Grid container spacing={2}>
             {rdpData?.map((item) => (
               <Grid key={item.name} item md={4} sm={6}>
-                <Card elevation={2}>
-                  <CardContent>
+                <Card
+                  elevation={2}
+                  onClick={() =>
+                    setOnViewStream({
+                      name: item.name,
+                      frame_rate: item.frame_rate,
+                    })
+                  }
+                >
+                  <CardContent
+                    sx={{
+                      userSelect: "none",
+                    }}
+                  >
                     <Typography variant={"h5"}>{item.name}</Typography>
                     <Typography variant={"body2"} color={"text.secondary"}>
                       {item.desc}
@@ -270,6 +294,34 @@ export const Home: FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsViewingRdp(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={!!onViewStream}
+        onClose={() => setOnViewStream(null)}
+        scroll={"paper"}
+        fullWidth
+        maxWidth={"xl"}
+        sx={{
+          "& .MuiDialog-paper": {
+            height: "100%",
+          },
+        }}
+      >
+        <DialogTitle>Remote Desktop {onViewStream?.name}</DialogTitle>
+        <DialogContent dividers>
+          <Stack
+            justifyContent={"center"}
+            alignItems={"center"}
+            sx={{
+              height: "100%",
+              width: "100%",
+            }}
+          ></Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOnViewStream(null)}>Close</Button>
         </DialogActions>
       </Dialog>
     </LocalizationProvider>
